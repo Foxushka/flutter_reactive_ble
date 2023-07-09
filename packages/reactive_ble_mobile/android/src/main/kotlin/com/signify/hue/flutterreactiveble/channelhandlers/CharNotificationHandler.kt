@@ -1,11 +1,11 @@
 package com.signify.hue.flutterreactiveble.channelhandlers
 
-import com.signify.hue.flutterreactiveble.ProtobufModel as pb
 import com.signify.hue.flutterreactiveble.converters.ProtobufMessageConverter
 import com.signify.hue.flutterreactiveble.converters.UuidConverter
 import io.flutter.plugin.common.EventChannel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import com.signify.hue.flutterreactiveble.ProtobufModel as pb
 
 class CharNotificationHandler(private val bleClient: com.signify.hue.flutterreactiveble.ble.BleClient) :
     EventChannel.StreamHandler {
@@ -61,7 +61,7 @@ class CharNotificationHandler(private val bleClient: com.signify.hue.flutterreac
 
     private fun handleNotificationValue(
         subscriptionRequest: pb.CharacteristicAddress,
-        value: ByteArray
+        value: ByteArray,
     ) {
         val convertedMsg = protobufConverter.convertCharacteristicInfo(subscriptionRequest, value)
         charNotificationSink?.success(convertedMsg.toByteArray())
@@ -69,7 +69,7 @@ class CharNotificationHandler(private val bleClient: com.signify.hue.flutterreac
 
     private fun handleNotificationError(
         subscriptionRequest: pb.CharacteristicAddress,
-        error: Throwable
+        error: Throwable,
     ) {
         val convertedMsg =
             protobufConverter.convertCharacteristicError(subscriptionRequest, error.message ?: "")

@@ -104,7 +104,6 @@ class ReactiveBleClientTest {
         subject.onComplete()
     }
 
-
     @DisplayName("Establishing a connection")
     @Nested
     inner class EstablishConnectionTest {
@@ -152,7 +151,7 @@ class ReactiveBleClientTest {
 
             every { rxConnection.readCharacteristic(any<UUID>()) }.returns(Single.just(byteArrayOf(byteMin, byteMax)))
             val observable = sut.readCharacteristic("test", UUID.randomUUID())
-                    .map { result -> result as CharOperationSuccessful }.test()
+                .map { result -> result as CharOperationSuccessful }.test()
 
             assertThat(observable.values().first().value).isEqualTo(listOf(byteMin, byteMax))
         }
@@ -209,7 +208,6 @@ class ReactiveBleClientTest {
             val bytes = byteArrayOf(byteMin, byteMax)
             subject.onNext(EstablishConnectionFailure("test", "error"))
 
-
             sut.writeCharacteristicWithoutResponse("test", UUID.randomUUID(), bytes).test()
 
             verify(exactly = 0) { rxConnection.writeCharWithoutResponse(any<UUID>(), any()) }
@@ -236,7 +234,7 @@ class ReactiveBleClientTest {
 
             every { rxConnection.writeCharWithResponse(any(), any()) }.returns(Single.just(byteArrayOf(byteMin, byteMax)))
             val observable = sut.writeCharacteristicWithResponse("test", UUID.randomUUID(), bytes)
-                    .map { result -> result as CharOperationSuccessful }.test()
+                .map { result -> result as CharOperationSuccessful }.test()
 
             assertThat(observable.values().first().value).isEqualTo(bytes.toList())
         }
@@ -289,7 +287,6 @@ class ReactiveBleClientTest {
 
         @Test
         fun `starts with current state`() {
-
             val result = sut.observeBleStatus().test()
             assertThat(result.values().count()).isEqualTo(2)
             assertThat(result.values().first()).isEqualTo(BleStatus.POWERED_OFF)
@@ -324,7 +321,7 @@ class ReactiveBleClientTest {
         @BeforeEach
         fun setup() {
             every { bleDevice.bluetoothDevice }.returns(bluetoothDevice)
-            every {bluetoothDevice.bondState}.returns(BOND_BONDED)
+            every { bluetoothDevice.bondState }.returns(BOND_BONDED)
         }
 
         @Test
